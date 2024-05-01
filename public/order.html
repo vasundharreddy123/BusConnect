@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="apsrtcMain">
+<head>
+    <meta charset="UTF-8" />
+    <title>TSRTC-Logistic Services</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="This is Home Page Description,APSRTC courier services Home" />
+</head>
+<style>
+  body {
+    background-image: url("or.jpeg");
+    background-repeat: no-repeat;
+    background-size:cover ;
+    font-family: Arial, sans-serif;
+    background-color: #8bebf8;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px; /* Adjust maximum width as needed */
+    margin: auto;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.panel {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    font-weight: bold;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: url('arrow-down.png') no-repeat right center;
+    background-size: 20px;
+    padding-right: 30px;
+}
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+footer {
+    background-color: none;
+    background: #333;
+    color: #fff;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
+}
+
+</style>
+<body ng-app="apsrtcMain" ng-controller="RatecalCtrl" ng-cloak>
+    <section id="content">
+        <div class="container">
+            <div class="panel panel-default" style="border: 1px solid #ccc;">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="usr">From <span class="red">*</span></label>
+                        <input type="text" class="form-control" autocomplete="off" auto-complete="auto.SenderCompleteOptions" ng-model="data.SenderOriginCounterName" placeholder="Start typing with location" id="origin" data-validationtype="required" />
+                    </div>
+                    <div class="form-group">
+                        <label for="usr">To <span class="red">*</span></label>
+                        <input type="text" autocomplete="off" auto-complete="auto.DestinationCompleteOptions" data-validationtype="required" class="form-control" ng-model="data.ReceiverOriginCounterName" placeholder="Start typing with location" id="origin" />
+                    </div>
+                    <div class="form-group">
+                        <label for="usr"> Shipment Value</label>
+                        <input type="text" class="form-control" name="shipmentvalue" placeholder="Shipment Value" ng-model="data.ShipmentValue" z-number maxlength="5">
+                    </div>
+                    <div class="form-group">
+                        <label class="" for="usr">Booking <span class="red">*</span></label>
+                        <select class="form-control" ng-model="data.BookingTypeMasterId" id="ServiceTypeId" ng-change="onBookingChanged(data.BookingTypeMasterId)" data-validationtype="required">
+                            <option value="">Select Option</option>
+                            <option ng-repeat="w in data.BookingTypes_Lookup" value="{{w.BookingTypeMasterId}}">Bus Booking</option>
+                            <option ng-repeat="w in data.BookingTypes_Lookup" value="{{w.BookingTypeMasterId}}">Cargo Booking</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="" for="usr">Delivery<span class="red">*</span></label>
+                        <select class="form-control" ng-model="data.DeliveryOptionId" id="DeliveryOptionId" data-validationtype="required" ng-change="DeliveryTypeChange()">
+                            <option value="">Select Option</option>
+                            <option ng-repeat="w in data.DeliveryOptions_Lookup" value="{{w.DeliveryOptionId}}">Speed Delivery</option>
+                            <option ng-repeat="w in data.DeliveryOptions_Lookup" value="{{w.DeliveryOptionId}}">Normal Delivery</option>
+                        </select>
+                        <span style="color:red;text-align:right" ng-show="Saveform.DeliveryOptionId.$error.required && formHasError">Please Select Delivery</span>
+                    </div>
+                    <div class="form-group">
+                        <label class="" for="usr">Priority<span class="red">*</span></label>
+                        <select class="form-control" ng-model="data.DeliveryOptionId" id="DeliveryOptionId" data-validationtype="required" ng-change="DeliveryTypeChange()">
+                            <option value="">Select Option</option>
+                            <option ng-repeat="w in data.DeliveryOptions_Lookup" value="{{w.DeliveryOptionId}}">Important Documents</option>
+                            <option ng-repeat="w in data.DeliveryOptions_Lookup" value="{{w.DeliveryOptionId}}">Normal goods</option>
+                        </select>
+                    </div>
+                    <div class="form-group" ng-if="data.DeliveryOptionId==3">
+                        <label for="usr">Delivery Charges</label>
+                        <input type="text" name="oPincode" class="form-control" ng-model="data.LocationDeliveryCharges" placeholder="Location Delivery Charges" id="origin" disabled />
+                    </div>
+                    <div class="form-group">
+                        <label for="usr"> Shipment Description</label>
+                        <input type="text" class="form-control" name="shipmentvalue" placeholder="Shipment Description" ng-model="data.ShipmentDescription">
+                    </div>
+                    <div>
+                        <a type="submit" href="dashbd.html" class="submit" style="background-color: #3731e0; color: white; padding: 10px 20px; font-size: 20px; margin-left: 200px; cursor: pointer; text-decoration: none;">Order</a>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div id="sub-footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <p class="footer__copyright">© 2024 www.BusConnect.in All rights reserved</p>
+                    </div>
+                    <div class="col-sm-4">
+                        <a href="/TSCounter/Account/TermsConditions">Terms & Conditions</a> |
+                        <a href="/TSCounter/Account/PrivacyPolicy">Privacy Policy</a> |
+                        <a href="/TSCounter/Account/Disclaimer">Disclaimer</a>
+                    </div>
+                    <div class="col-sm-3">Powered by BusConnect Limited</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <a href="#" class="scrollup" ><i class="fa fa-angle-up active"></i></a>
+</body>
+</html>
